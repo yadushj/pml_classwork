@@ -3,9 +3,10 @@ title: "Predicting Efficient Barbell Lifts"
 author: "Joe Yadush"
 date: "October 12, 2017"
 output: html_document
-keep_md: true
 ---
-##Executive Summary
+
+
+## Executive Summary
 This excercise will use R and some basic machine learning algorithms to predict how well barbell lifts were accomplished from a set of 20 test records. The data is grouped into 5 classifications with the 'A' class being the group of roll, pitch, and yaw measurements from wearable recording devices that define a correct executement of the excercise. For more information on the classifications, data, and collection methods please refer to the Human Actvity Recognition paper which was the source for this assignment.
 
 
@@ -13,13 +14,14 @@ This excercise will use R and some basic machine learning algorithms to predict 
 Velloso, E.; Bulling, A.; Gellersen, H.; Ugulino, W.; Fuks, H. Qualitative Activity Recognition of Weight Lifting Exercises. Proceedings of 4th International Conference in Cooperation with SIGCHI (Augmented Human '13) . Stuttgart, Germany: ACM SIGCHI, 2013.
 
 
-##Getting and Cleaning the Data
+## Getting and Cleaning the Data
 We will download the data from the aforementioned site
 ```{r}
 library(randomForest)
 library(caret)
 library(rattle)
 library(gbm)
+knitr::opts_chunk$set(echo = TRUE)
 
 if (!file.exists("pml-training.csv")) {
         download.file("https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv", "pml-training.csv")
@@ -55,7 +57,7 @@ inTrain <- createDataPartition(df_training_data$classe, p = 0.7, list = FALSE)
 train <- df_training_data[inTrain, ]
 test  <- df_training_data[-inTrain, ]
 ```
-##Model Selection
+## Model Selection
 Attempting three different models to examine for accuracy learned from the course.
 Decision Tree (Dendograms), Random Forests, and Boosting
 
@@ -87,7 +89,7 @@ gbmPredict <- predict(gbmFit, newdata = test)
 gbmMatrix <- confusionMatrix(gbmPredict, test$classe)
 gbmMatrix
 ```
-##Conclusion and Prediction Results
+## Conclusion and Prediction Results
 The _Decision Tree_ was excellant for a quick visual to give an indication of multiple variables, but had left a lot of room for uncertainty and the accuracy was very low. The _Boosting_, which is very popular and takes resampling to a good level did produce a much better result, but the _Random Forest_ model seemed to provide the most accurate with an **accuracy of .9959** and an **out of sample error of .004** measurements with which to apply against the final test set with very little possibility that there would be any misclassification.
 
 The results applied against the Random Forest are shown below:
